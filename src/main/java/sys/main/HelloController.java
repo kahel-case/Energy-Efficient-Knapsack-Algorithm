@@ -2,6 +2,7 @@ package sys.main;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.Pane;
@@ -61,6 +62,42 @@ public class HelloController implements Initializable {
     @FXML
     protected void onDefaultSelection() {
         buttonDefaultSelection.setDisable(true);
+
+        int capacity;
+        try {
+            capacity = Integer.parseInt(maxCapacitySpinner.getEditor().getText());
+            if (capacity < 1) { capacity = 1; }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid integer!");
+            maxCapacitySpinner.getEditor().setText("");
+            buttonDefaultSelection.setDisable(false);
+            return;
+        }
+        maxCapacitySpinner.getEditor().setText(String.valueOf(capacity));
+
+        Node[] children = nodePanel.getChildren().toArray(new Node[0]);
+        if (!(children.length > 0)) {
+            JOptionPane.showMessageDialog(null, "There must be one or more nodes created!");
+            maxCapacitySpinner.getEditor().setText("");
+            buttonDefaultSelection.setDisable(false);
+            return;
+        }
+
+        int[] energyConsumption = new int[children.length];
+        int[] residualEnergy = new int[children.length];
+        int n = children.length;
+
+        int count = 0;
+        for (Node node  : children) {
+            energyConsumption[count] = ((NetworkNode) node).getEnergyConsumption();
+            residualEnergy[count] = ((NetworkNode) node).getResidualEnergy();
+            count++;
+        }
+
+        for (int i = 0; i < children.length; i++) {
+            System.out.println();
+        }
+
         System.out.println("Default Selection Process!");
         buttonDefaultSelection.setDisable(false);
     }

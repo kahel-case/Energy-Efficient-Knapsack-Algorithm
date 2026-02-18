@@ -15,4 +15,15 @@ public class Utility {
         }
         return n;
     }
+
+    public static int validCapacity(String number) {
+        int n = 0;
+        try {
+            n = Integer.parseInt(number);
+            if (n < 1) n = 1;
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid integer!");
+        }
+        return n;
+    }
 }

@@ -18,11 +18,10 @@ public class NetworkNode extends Button {
 
     private NodeInformation _info;
 
-    public final Image iconDefault = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/circle.png")));
-    public final Image iconClusterHead = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/star-inside-circle.png")));
-
-    ImageView iconDisplayDefault = new ImageView(iconDefault);
-    ImageView iconDisplayClusterHead = new ImageView(iconClusterHead);
+    //public final Image iconDefault = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/circle.png")));
+    //public final Image iconClusterHead = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/icons/star-inside-circle.png")));
+    //ImageView iconDisplayDefault = new ImageView(iconDefault);
+    //ImageView iconDisplayClusterHead = new ImageView(iconClusterHead);
 
     public NetworkNode(int id, int energyConsumption, int residualEnergy, VBox parent) {
         this._id = id;
@@ -31,10 +30,10 @@ public class NetworkNode extends Button {
         this._parent = parent;
         this._info = new NodeInformation(_id, _energyConsumption, _residualEnergy);
 
-        this.iconDisplayDefault.setFitHeight(15);
-        this.iconDisplayDefault.setFitWidth(15);
-        this.iconDisplayClusterHead.setFitHeight(25);
-        this.iconDisplayClusterHead.setFitWidth(25);
+        //this.iconDisplayDefault.setFitHeight(15);
+        //this.iconDisplayDefault.setFitWidth(15);
+        //this.iconDisplayClusterHead.setFitHeight(25);
+        //this.iconDisplayClusterHead.setFitWidth(25);
 
         this.setPrefSize(15, 15);
         this.setMaxSize(15, 15);
@@ -52,4 +51,7 @@ public class NetworkNode extends Button {
     }
 
     public int getNodeId() { return this._id; }
+
+    public int getEnergyConsumption() { return this._energyConsumption; }
+    public int getResidualEnergy() { return this._residualEnergy; }
 }
