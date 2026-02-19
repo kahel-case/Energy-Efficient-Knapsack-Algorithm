@@ -15,7 +15,7 @@ import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable {
+public class MainController implements Initializable {
 
     @FXML private Pane nodePanel;
 

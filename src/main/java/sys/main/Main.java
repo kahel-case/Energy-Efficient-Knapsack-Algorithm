@@ -8,11 +8,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
-public class HelloApplication extends Application {
+public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        URL url = HelloApplication.class.getResource("/sys/main/main-frame.fxml");
+        URL url = Main.class.getResource("/sys/main/main-frame.fxml");
         System.out.println("Initializing Frame: " + url);
 
         FXMLLoader fxmlLoader = new FXMLLoader(url);

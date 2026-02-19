@@ -1,7 +1,7 @@
 package res;
 
 import javafx.scene.Node;
-import sys.main.HelloApplication;
+import sys.main.Main;
 
 import javax.swing.*;
 import java.net.URL;
@@ -30,7 +30,7 @@ public class Utility {
 
     public static void mentira() {
         try {
-            URL imageUrl = HelloApplication.class.getResource("/icons/nesesito400baros.jpg");
+            URL imageUrl = Main.class.getResource("/icons/nesesito400baros.jpg");
             if (imageUrl == null) {
                 System.err.println("Image not found. Check the path.");
                 return;
