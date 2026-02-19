@@ -28,6 +28,8 @@ public class HelloController implements Initializable {
     @FXML private Spinner<Integer> nodeSpinner;
     @FXML private Spinner<Integer> maxCapacitySpinner;
 
+    private int numberOfNodes;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -38,11 +40,37 @@ public class HelloController implements Initializable {
         nodePanel.getChildren().clear();
         buttonCreateNodes.setDisable(true);
 
-        int n = Utility.validInteger(nodeSpinner.getEditor().getText());
-        if (n == 100 || n == 1) {
-            nodeSpinner.getEditor().setText(String.valueOf(n));
+        int n;
+
+        // RESTRICTS: floats, letters, doubles
+        try {
+            n = Integer.parseInt(nodeSpinner.getEditor().getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid integer.");
+            nodeSpinner.getEditor().setText("");
+            buttonCreateNodes.setDisable(false);
+            return;
         }
 
+        // RESTRICTS: Integers less than zero
+        if (n < 0) {
+            JOptionPane.showMessageDialog(null, "The number of nodes must not go below zero.");
+            nodeSpinner.getEditor().setText("");
+            buttonCreateNodes.setDisable(false);
+            return;
+        }
+
+        // RESTRICTS: Integers greater than 100
+        if (n > 100) {
+            n = 100;
+            nodeSpinner.getEditor().setText(String.valueOf(n));
+            JOptionPane.showMessageDialog(null, "The number of nodes cannot exceed 100.");
+        }
+
+        numberOfNodes = n;
+
+        // Assigns individual nodes random values
+        // Also assigns their random location
         for (int i = 0; i < n; i++) {
             int energyConsumption = (int) Math.max(50, (Math.random() * 150));
             int residualEnergy = (int) Math.max(50, (Math.random()*300));
@@ -55,7 +83,6 @@ public class HelloController implements Initializable {
             nodePanel.getChildren().add(node);
         }
 
-        System.out.println("Node Created!");
         buttonCreateNodes.setDisable(false);
     }
 
@@ -64,41 +91,52 @@ public class HelloController implements Initializable {
         buttonDefaultSelection.setDisable(true);
 
         int capacity;
+
+        // RESTRICTS: floats, letters, doubles
         try {
             capacity = Integer.parseInt(maxCapacitySpinner.getEditor().getText());
-            if (capacity < 1) { capacity = 1; }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid integer!");
             maxCapacitySpinner.getEditor().setText("");
             buttonDefaultSelection.setDisable(false);
             return;
         }
-        maxCapacitySpinner.getEditor().setText(String.valueOf(capacity));
 
-        Node[] nodes = nodePanel.getChildren().toArray(new Node[0]);
-        if (!(nodes.length > 0)) {
-            JOptionPane.showMessageDialog(null, "There must be one or more nodes created!");
+        // RESTRICTS: Integers less than zero
+        if (capacity < 0) {
+            JOptionPane.showMessageDialog(null, "The number of nodes must not go below zero.");
             maxCapacitySpinner.getEditor().setText("");
             buttonDefaultSelection.setDisable(false);
             return;
         }
 
-        int[] energyConsumption = new int[nodes.length];
-        int[] residualEnergy = new int[nodes.length];
-        int pointer = nodes.length;
-
-        int count = 0;
-        for (Node node  : nodes) {
-            energyConsumption[count] = ((NetworkNode) node).getEnergyConsumption();
-            residualEnergy[count] = ((NetworkNode) node).getResidualEnergy();
-            count++;
+        // ME TRAIS EL KAMBIO!
+        if (capacity >= 400 && numberOfNodes > 80) {
+            Utility.mentira();
+            maxCapacitySpinner.getEditor().setText("");
+            buttonDefaultSelection.setDisable(false);
+            return;
         }
+
+        // Collects all individual nodes inside the nodes panel and puts them into an array
+        Node[] nodes = nodePanel.getChildren().toArray(new Node[0]);
+        if (!(nodes.length > 0)) {
+            JOptionPane.showMessageDialog(null, "There must be one or more nodes created!");
+            buttonDefaultSelection.setDisable(false);
+            return;
+        }
+
+        // Collects all weights and values for the algorithm
+        int[] energyConsumption = Utility.compileWeights(nodes);
+        int[] residualEnergy = Utility.compileValues(nodes);
+        int pointer = nodes.length;
 
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         long memoryBefore = runtime.totalMemory() - runtime.freeMemory();
         long startTime = System.nanoTime();
 
+        // THE ACTUAL DEFAULT ALGORITHM
         System.out.println("Default Selection Process: " + KnapsackAlgorithm.defaultSelection(capacity, energyConsumption, residualEnergy, pointer, nodes));
 
         long endTime = System.nanoTime();
@@ -106,7 +144,7 @@ public class HelloController implements Initializable {
         long duration = endTime - startTime;
         long memoryUsed = memoryAfter - memoryBefore;
         System.out.println("Execution Time: " + (duration / 1_000_000.0) + " ms");
-        System.out.println("Memory Used: " + (memoryUsed / 1024.0) + " KB");
+        System.out.println("Memory Used: " + (memoryUsed / 1024.0) + " KB\n");
         JOptionPane.showMessageDialog(null,
                 "Execution Time: " + (duration / 1_000_000.0) + " ms" + "\n" +
                         "Memory Used: " + (memoryUsed / 1024.0) + " KB");
@@ -117,42 +155,46 @@ public class HelloController implements Initializable {
     @FXML
     protected void onEnhancedSelection() {
         buttonEnhancedSelection.setDisable(true);
+
         int capacity;
+
+        // RESTRICTS: floats, letters, doubles
         try {
             capacity = Integer.parseInt(maxCapacitySpinner.getEditor().getText());
-            if (capacity < 1) { capacity = 1; }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Invalid integer!");
             maxCapacitySpinner.getEditor().setText("");
             buttonEnhancedSelection.setDisable(false);
             return;
         }
-        maxCapacitySpinner.getEditor().setText(String.valueOf(capacity));
 
-        Node[] nodes = nodePanel.getChildren().toArray(new Node[0]);
-        if (!(nodes.length > 0)) {
-            JOptionPane.showMessageDialog(null, "There must be one or more nodes created!");
+        // RESTRICTS: Integers less than zero
+        if (capacity < 0) {
+            JOptionPane.showMessageDialog(null, "The number of nodes must not go below zero.");
             maxCapacitySpinner.getEditor().setText("");
-            buttonDefaultSelection.setDisable(false);
+            buttonEnhancedSelection.setDisable(false);
             return;
         }
 
-        int[] energyConsumption = new int[nodes.length];
-        int[] residualEnergy = new int[nodes.length];
-        int pointer = nodes.length;
-
-        int count = 0;
-        for (Node node  : nodes) {
-            energyConsumption[count] = ((NetworkNode) node).getEnergyConsumption();
-            residualEnergy[count] = ((NetworkNode) node).getResidualEnergy();
-            count++;
+        // Collects all individual nodes inside the nodes panel and puts them into an array
+        Node[] nodes = nodePanel.getChildren().toArray(new Node[0]);
+        if (!(nodes.length > 0)) {
+            JOptionPane.showMessageDialog(null, "There must be one or more nodes created!");
+            buttonEnhancedSelection.setDisable(false);
+            return;
         }
+
+        // Collects all weights and values for the algorithm
+        int[] energyConsumption = Utility.compileWeights(nodes);
+        int[] residualEnergy = Utility.compileValues(nodes);
+        int pointer = nodes.length;
 
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         long memoryBefore = runtime.totalMemory() - runtime.freeMemory();
         long startTime = System.nanoTime();
 
+        // THE ACTUAL ENHANCED ALGORITHM
         System.out.println("Enhanced Selection Process: " + KnapsackAlgorithm.enhancedSelection(capacity, energyConsumption, residualEnergy, pointer, nodes));
 
         long endTime = System.nanoTime();
@@ -160,7 +202,7 @@ public class HelloController implements Initializable {
         long duration = endTime - startTime;
         long memoryUsed = memoryAfter - memoryBefore;
         System.out.println("Execution Time: " + (duration / 1_000_000.0) + " ms");
-        System.out.println("Memory Used: " + (memoryUsed / 1024.0) + " KB");
+        System.out.println("Memory Used: " + (memoryUsed / 1024.0) + " KB\n");
         JOptionPane.showMessageDialog(null,
                 "Execution Time: " + (duration / 1_000_000.0) + " ms" + "\n" +
                 "Memory Used: " + (memoryUsed / 1024.0) + " KB");
