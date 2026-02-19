@@ -41,7 +41,7 @@ public class NetworkNode extends Button {
         //this.setStyle("-fx-background-color: transparent;");
         //this.setGraphic(iconDisplayDefault);
 
-        this.hoverProperty().addListener((_, _, newValue) -> {
+        this.hoverProperty().addListener((_1, _2, newValue) -> {
             if (newValue) {
                 _parent.getChildren().add(_info);
             } else {

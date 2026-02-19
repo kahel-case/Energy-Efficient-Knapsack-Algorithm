@@ -19,7 +19,8 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-frame.fxml"));
+        URL url = HelloApplication.class.getResource("main-frame.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(url);
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Energy-Efficient Knapsack Algorithm");
         stage.setResizable(false);

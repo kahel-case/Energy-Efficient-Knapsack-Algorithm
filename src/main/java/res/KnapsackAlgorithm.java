@@ -1,32 +1,71 @@
 package res;
 
+import javafx.scene.Node;
+
 public class KnapsackAlgorithm {
-    public static int knapsack(int capacity, int[] weight, int[] value, int n)
-    {
-        // Base Case
-        if (n == 0 || capacity == 0)
+
+    public static int defaultSelection(int capacity, int[] weight, int[] value, int n, Node[] node) {
+        if (n == 0 || capacity == 0) {
             return 0;
+        }
 
-        // If weight of the nth item is more than Knapsack capacity,
-        // then this item cannot be included in the optimal solution
-        if (weight[n - 1] > capacity)
-            return knapsack(capacity, weight, value, n - 1);
+        if (weight[n - 1] > capacity) {
+            return defaultSelection(capacity, weight, value, n - 1, node);
+        }
 
-            // Return the maximum of two cases:
-            // (1) nth item included
-            // (2) not included
-        else
-            return Math.max(value[n - 1]
-                            + knapsack(capacity - weight[n - 1], weight, value, n - 1),
-                              knapsack(capacity, weight, value, n - 1));
+        else {
+            return Math.max(value[n - 1] + defaultSelection(capacity - weight[n - 1], weight, value, n - 1, node), defaultSelection(capacity, weight, value, n - 1, node));
+        }
     }
+
+    // Modified Version of the Bottom-Up Approach
+    // taken from https://www.geeksforgeeks.org/dsa/0-1-knapsack-problem-dp-10/
+    public static int enhancedSelection(int capacity, int[] weight, int[] value, int n, Node[] nodes) {
+
+        int[][] dp = new int[n + 1][capacity + 1];
+
+        // THIS IS THE BOTTOM-UP APPROACH
+        for (int i = 0; i <= n; i++) {
+            for (int w = 0; w <= capacity; w++) {
+
+                if (i == 0 || w == 0) {
+                    dp[i][w] = 0;
+                }
+                else if (weight[i - 1] <= w) {
+                    dp[i][w] = Math.max(
+                            value[i - 1] + dp[i - 1][w - weight[i - 1]],
+                            dp[i - 1][w]
+                    );
+                }
+                else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+
+        // CLUSTER HEAD SELECTION
+        int w = capacity;
+        for (int i = n; i > 0; i--) {
+            if (dp[i][w] != dp[i - 1][w]) {
+                // GREEN
+                nodes[i - 1].setStyle("-fx-background-color: #2bff00; -fx-font-size: 1px;");
+                w -= weight[i - 1];
+            } else {
+                // RED
+                nodes[i - 1].setStyle("-fx-background-color: #ff0000; -fx-font-size: 1px;");
+            }
+        }
+
+        return dp[n][capacity];
+    }
+
     // Driver code
     public static void main(String[] args)
     {
-        int[] profit = new int[] { 250, 442, 1100, 44, 600 };
-        int[] weight = new int[] { 67, 45, 140, 51, 150 };
-        int capacity = 300;
+        int[] profit = new int[] { 5, 3, 4 };
+        int[] weight = new int[] { 1, 2, 3 };
+        int capacity = 5;
         int n = profit.length;
-        System.out.println(knapsack(capacity, weight, profit, n));
+        //System.out.println(defaultSelection(capacity, weight, profit, n));
     }
 }
