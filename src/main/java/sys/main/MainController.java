@@ -86,6 +86,9 @@ public class MainController implements Initializable {
         buttonCreateNodes.setDisable(false);
     }
 
+    /*
+    *   DEFAULT SELECTION: BASELINE ALGORITHM
+    * */
     @FXML
     protected void onDefaultSelection() {
         buttonDefaultSelection.setDisable(true);
@@ -110,8 +113,11 @@ public class MainController implements Initializable {
             return;
         }
 
-        // ME TRAIS EL KAMBIO!
+        // ME TRAIS EL KAMBIO! (easter egg)
         if (capacity >= 400 && numberOfNodes > 80) {
+            /*
+             *   Remove this if-else statement if you want to go beyond 400 capacity for testing
+             * */
             Utility.mentira();
             maxCapacitySpinner.getEditor().setText("");
             buttonDefaultSelection.setDisable(false);
@@ -152,6 +158,9 @@ public class MainController implements Initializable {
         buttonDefaultSelection.setDisable(false);
     }
 
+    /*
+     *   ENHANCED SELECTION: THE ENHANCED ALGORITHM (BOTTOM-UP APPROACH)
+     * */
     @FXML
     protected void onEnhancedSelection() {
         buttonEnhancedSelection.setDisable(true);
