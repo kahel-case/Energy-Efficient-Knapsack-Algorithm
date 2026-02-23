@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -13,6 +14,7 @@ import res.Utility;
 
 import javax.swing.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -22,13 +24,20 @@ public class MainController implements Initializable {
     @FXML private Button buttonCreateNodes;
     @FXML private Button buttonDefaultSelection;
     @FXML private Button buttonEnhancedSelection;
+    @FXML private Button buttonResetAverage;
 
     @FXML private VBox nodeInformationPanel;
 
     @FXML private Spinner<Integer> nodeSpinner;
     @FXML private Spinner<Integer> maxCapacitySpinner;
 
+    @FXML private Label labelAverageTime;
+    @FXML private Label labelAverageSpace;
+
     private int numberOfNodes;
+
+    private final ArrayList<Double> averageTime = new ArrayList<>();
+    private final ArrayList<Double> averageSpace = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -114,7 +123,7 @@ public class MainController implements Initializable {
         }
 
         // ME TRAIS EL KAMBIO! (easter egg)
-        if (capacity >= 400 && numberOfNodes > 80) {
+        if (capacity >= 400 && numberOfNodes > 100) {
             /*
              *   Remove this if-else statement if you want to go beyond 400 capacity for testing
              * */
@@ -149,11 +158,15 @@ public class MainController implements Initializable {
         long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
         long duration = endTime - startTime;
         long memoryUsed = memoryAfter - memoryBefore;
+
+        averageTime.add(duration / 1_000_000.0);
+        averageSpace.add(memoryUsed / 1024.0);
+        displayCurrentAverage();
+
         System.out.println("Execution Time: " + (duration / 1_000_000.0) + " ms");
         System.out.println("Memory Used: " + (memoryUsed / 1024.0) + " KB\n");
-        JOptionPane.showMessageDialog(null,
-                "Execution Time: " + (duration / 1_000_000.0) + " ms" + "\n" +
-                        "Memory Used: " + (memoryUsed / 1024.0) + " KB");
+
+        //JOptionPane.showMessageDialog(null,"Execution Time: " + (duration / 1_000_000.0) + " ms" + "\n" + "Memory Used: " + (memoryUsed / 1024.0) + " KB");
 
         buttonDefaultSelection.setDisable(false);
     }
@@ -210,12 +223,46 @@ public class MainController implements Initializable {
         long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
         long duration = endTime - startTime;
         long memoryUsed = memoryAfter - memoryBefore;
+
+        averageTime.add(duration / 1_000_000.0);
+        averageSpace.add(memoryUsed / 1024.0);
+        displayCurrentAverage();
+
         System.out.println("Execution Time: " + (duration / 1_000_000.0) + " ms");
         System.out.println("Memory Used: " + (memoryUsed / 1024.0) + " KB\n");
-        JOptionPane.showMessageDialog(null,
-                "Execution Time: " + (duration / 1_000_000.0) + " ms" + "\n" +
-                "Memory Used: " + (memoryUsed / 1024.0) + " KB");
+
+
+        //JOptionPane.showMessageDialog(null,"Execution Time: " + (duration / 1_000_000.0) + " ms" + "\n" + "Memory Used: " + (memoryUsed / 1024.0) + " KB");
 
         buttonEnhancedSelection.setDisable(false);
+    }
+
+    @FXML
+    protected void onResetAverage() {
+        labelAverageTime.setText("Time Complexity");
+        labelAverageSpace.setText("Space Complexity");
+        averageTime.clear();
+        averageSpace.clear();
+    }
+
+    private void displayCurrentAverage() {
+        int n = averageTime.size();
+
+        double tempTime = 0;
+        double tempSpace = 0;
+
+        for (int i = 0; i < n; i++) {
+            tempTime += averageTime.get(i);
+            tempSpace += averageSpace.get(i);
+        }
+
+        double currentAverageTime = tempTime / n;
+        double currentAverageSpace = tempSpace / n;
+
+
+        System.out.printf("Time: %.2f ms%n", currentAverageTime);
+        System.out.printf("Space: %.2f KB%n", currentAverageSpace);
+        labelAverageTime.setText(String.format("Time: %.2f ms", currentAverageTime));
+        labelAverageSpace.setText(String.format("Time: %.2f KB", currentAverageSpace));
     }
 }

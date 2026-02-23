@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane fx:id="mainFrame" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="sys.main.MainController">
+<GridPane fx:id="mainFrame" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sys.main.MainController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="120.0" prefWidth="160.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -34,6 +35,9 @@
             <Button fx:id="buttonDefaultSelection" mnemonicParsing="false" onAction="#onDefaultSelection" text="Default Selection" />
             <Button fx:id="buttonEnhancedSelection" mnemonicParsing="false" onAction="#onEnhancedSelection" text="Enhanced Selection" />
             <Separator prefWidth="200.0" />
+            <Label fx:id="labelAverageTime" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="135.0" text="Average Time" textAlignment="CENTER" />
+            <Label fx:id="labelAverageSpace" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="135.0" text="Average Space" textAlignment="CENTER" />
+            <Button fx:id="buttonResetAverage" mnemonicParsing="false" onAction="#onResetAverage" text="Reset Average" />
          </children>
       </VBox>
       <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
