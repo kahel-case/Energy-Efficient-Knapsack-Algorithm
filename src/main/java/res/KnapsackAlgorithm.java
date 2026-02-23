@@ -5,15 +5,15 @@ import javafx.scene.Node;
 public class KnapsackAlgorithm {
 
     // THIS ALGORITHM MIGHT BURN YOUR HOUSE DOWN IF CAPACITY IS GREATER THAN 400!!!
-    public static int defaultSelection(int capacity, int[] weight, int[] value, int n, Node[] node) {
+    public static int defaultSelection(int capacity, int[] weight, int[] value, int n) {
         if (n == 0 || capacity == 0) {
             return 0;
         }
         if (weight[n - 1] > capacity) {
-            return defaultSelection(capacity, weight, value, n - 1, node);
+            return defaultSelection(capacity, weight, value, n - 1);
         }
         else {
-            return Math.max(value[n - 1] + defaultSelection(capacity - weight[n - 1], weight, value, n - 1, node), defaultSelection(capacity, weight, value, n - 1, node));
+            return Math.max(value[n - 1] + defaultSelection(capacity - weight[n - 1], weight, value, n - 1), defaultSelection(capacity, weight, value, n - 1));
         }
     }
 

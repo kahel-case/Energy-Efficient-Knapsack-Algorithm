@@ -152,7 +152,7 @@ public class MainController implements Initializable {
         long startTime = System.nanoTime();
 
         // THE ACTUAL DEFAULT ALGORITHM
-        System.out.println("Default Selection Process: " + KnapsackAlgorithm.defaultSelection(capacity, energyConsumption, residualEnergy, pointer, nodes));
+        System.out.println("Default Selection Process: " + KnapsackAlgorithm.defaultSelection(capacity, energyConsumption, residualEnergy, pointer));
 
         long endTime = System.nanoTime();
         long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
