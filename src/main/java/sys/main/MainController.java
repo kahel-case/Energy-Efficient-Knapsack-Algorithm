@@ -263,6 +263,6 @@ public class MainController implements Initializable {
         System.out.printf("Time: %.2f ms%n", currentAverageTime);
         System.out.printf("Space: %.2f KB%n", currentAverageSpace);
         labelAverageTime.setText(String.format("Time: %.2f ms", currentAverageTime));
-        labelAverageSpace.setText(String.format("Time: %.2f KB", currentAverageSpace));
+        labelAverageSpace.setText(String.format("Space: %.2f KB", currentAverageSpace));
     }
 }
